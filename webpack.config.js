@@ -11,7 +11,7 @@ module.exports = env => {
         entry: './src/main.tsx',
         output: {
             path: path.resolve(__dirname, `./dist/${mode}/`),
-            publicPath: './',
+            publicPath: '',
             filename: 'bundle.js'
         },
         resolve: {
