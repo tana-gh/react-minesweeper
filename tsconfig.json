@@ -1,15 +1,22 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
+        "target": "esnext",
+        "module": "esnext",
         "moduleResolution": "node",
         "strictNullChecks": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "skipLibCheck": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
+        "preserveConstEnums": true,
         "allowSyntheticDefaultImports": true,
         "sourceMap": true,
-        "declaration": false,
-        "jsx": "react"
+        "removeComments": false,
+        "jsx": "react",
+        "lib": [
+            "es2017",
+            "dom"
+        ]
     },
     "include": [
         "src/**/*"
