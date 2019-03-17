@@ -39,11 +39,11 @@ module.exports = env => {
                     ]
                 },
                 {
-                    test: /\.sass$/,
+                    test: /\.styl(us)?$/,
                     loaders: [
                         'style-loader',
                         'css-loader',
-                        'sass-loader?sourceMap&indentedSyntax'
+                        'stylus-loader?sourceMap'
                     ]
                 },
                 {
