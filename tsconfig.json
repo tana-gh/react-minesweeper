@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
+        "module": "esnext",
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "strict": true,
         "noImplicitAny": false,
         "skipLibCheck": true,
         "experimentalDecorators": true,
         "preserveConstEnums": true,
-        "allowSyntheticDefaultImports": true,
         "sourceMap": true,
         "removeComments": false,
         "jsx": "react",
