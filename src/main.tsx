@@ -1,6 +1,6 @@
 import * as React    from 'react'
 import * as ReactDOM from 'react-dom'
-import './font'
+import './utils/font'
 import './stylus/style.styl'
 
 class App extends React.Component {

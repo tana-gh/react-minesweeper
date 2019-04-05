@@ -6,6 +6,11 @@ module.exports = env => {
     const mode = env.dev  ? 'development' :
                  env.prod ? 'production'  :
                             ''
+    
+    if (mode === '') {
+        throw 'must specify --env.dev or --env.prod'
+    }
+
     return {
         mode: mode,
         entry: './src/main.tsx',
@@ -38,7 +43,8 @@ module.exports = env => {
                     test: /\.css$/,
                     loaders: [
                         'style-loader',
-                        'css-loader?sourceMap'
+                        'css-loader?sourceMap',
+                        'postcss-loader?sourceMap'
                     ]
                 },
                 {
@@ -46,6 +52,7 @@ module.exports = env => {
                     loaders: [
                         'style-loader',
                         'css-loader',
+                        'postcss-loader?sourceMap',
                         'stylus-loader?sourceMap'
                     ]
                 },
@@ -69,11 +76,11 @@ module.exports = env => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: './src/index.html'
+                template: './public/index.html'
             }),
             new CopyWebpackPlugin([
                 {
-                    from: './src/static/*',
+                    from: './public/static/*',
                     to: './static/[name].[ext]'
                 }
             ])
