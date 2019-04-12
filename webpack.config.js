@@ -20,7 +20,10 @@ module.exports = env => {
             filename: 'bundle.js'
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+            extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+            alias: {
+                '@': path.resolve(__dirname, './src/')
+            }
         },
         devServer: {
             contentBase: './dist/development/'
