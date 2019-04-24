@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "author": "tana",
   "license": "MIT",
+  "browserslist": [
+    "> 0.5%",
+    "last 2 version",
+    "not dead"
+  ],
   "scripts": {
     "test": "jest",
     "dev": "webpack-dev-server --env.dev",
@@ -45,6 +50,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.7.1",
     "postcss-loader": "^3.0.0",
+    "postcss-normalize": "^7.0.1",
     "react-test-renderer": "^16.8.6",
     "react-testing-library": "^6.1.2",
     "style-loader": "^0.23.1",
