@@ -45,7 +45,7 @@ module.exports = env => {
                 {
                     test: /\.css$/,
                     loaders: [
-                        'style-loader?sourceMap',
+                        'style-loader',
                         'css-loader?sourceMap',
                         'postcss-loader?sourceMap'
                     ]
@@ -53,7 +53,7 @@ module.exports = env => {
                 {
                     test: /\.styl(us)?$/,
                     loaders: [
-                        'style-loader?sourceMap',
+                        'style-loader',
                         'css-loader?sourceMap',
                         'postcss-loader?sourceMap',
                         'stylus-loader?sourceMap'

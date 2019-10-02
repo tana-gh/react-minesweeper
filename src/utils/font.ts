@@ -1,6 +1,6 @@
 import WebFont from 'webfontloader'
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     WebFont.load({
         google: {
             families: [
