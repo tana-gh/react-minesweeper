@@ -18,6 +18,13 @@ describe('create', () => {
 })
 
 describe('open', () => {
+    it('Is not in range', () => {
+        const game0 = Game.create(4, 3, 6)
+        const game1 = Game.open(game0, -1, -1)
+
+        expect(is(game0, game1)).toBeTruthy()
+    })
+
     it('Already Success', () => {
         let game0 = Game.create(4, 3, 6)
         game0 = game0.set('status', GameStatus.Type.Success)
@@ -88,6 +95,14 @@ describe('open', () => {
 })
 
 describe('rotateState', () => {
+    it('Is not in range', () => {
+        let game0 = Game.create(3, 4, 6)
+        game0 = Game.open(game0, 0, 0)
+        const game1 = Game.rotateState(game0, -1, -1)
+
+        expect(is(game0, game1)).toBeTruthy()
+    })
+
     it('Not Playing', () => {
         const game0 = Game.create(3, 4, 6)
         const game1 = Game.rotateState(game0, 0, 0)

@@ -19,6 +19,10 @@ export const create = (width: number, height: number, mineCount: number) => Map(
 }) as Map<any, any>
 
 export const open = (game: Map<any, any>, x: number, y: number) => {
+    if (!isInRange(game, x, y)) {
+        return game
+    }
+
     const status = game.get('status')
     
     if (status === GameStatus.Type.Success || status === GameStatus.Type.Failure) {
@@ -47,6 +51,10 @@ export const open = (game: Map<any, any>, x: number, y: number) => {
 }
 
 export const rotateState = (game: Map<any, any>, x: number, y: number) => {
+    if (!isInRange(game, x, y)) {
+        return game
+    }
+
     const status = game.get('status')
     
     if (status !== GameStatus.Type.Playing) {
@@ -75,4 +83,11 @@ export const rotateState = (game: Map<any, any>, x: number, y: number) => {
     }
 
     return game.update('cellField', cellField => CellField.setCell(cellField, x, y, cell))
+}
+
+const isInRange = (game: Map<any, any>, x: number, y: number) => {
+    const width  = game.getIn([ 'cellField', 'width'  ])
+    const height = game.getIn([ 'cellField', 'height' ])
+
+    return 0 <= x && x < width && 0 <= y && y <= height
 }
