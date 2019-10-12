@@ -1,19 +1,19 @@
-import Rx          from 'rxjs'
+import { Map }          from 'immutable'
 import * as CellContent from './CellContent'
 import * as CellState   from './CellState'
 
 export interface Type {
-    readonly key    : string
-    readonly x      : number
-    readonly y      : number
-    readonly content: Rx.BehaviorSubject<CellContent.Type>
-    readonly state  : Rx.BehaviorSubject<CellState  .Type>
+    key    : string
+    x      : number
+    y      : number
+    content: CellContent.Type
+    state  : CellState.Type
 }
 
-export const create = (x: number, y: number): Type => ({
+export const create = (x: number, y: number) => Map({
     key: `(${x}, ${y})`,
     x,
     y,
-    content: new Rx.BehaviorSubject<CellContent.Type>(CellContent.Type.Zero),
-    state  : new Rx.BehaviorSubject<CellState  .Type>(CellState  .Type.Closed)
-})
+    content: CellContent.Type.Zero,
+    state  : CellState.Type.Closed
+}) as Map<any, any>

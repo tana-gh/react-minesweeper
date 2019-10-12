@@ -12,6 +12,10 @@ export enum Type {
     Mine  = 9
 }
 
-export const getMineCount = (content: Type): number => (
+export const toMineCount = (content: Type): number => (
     content
+)
+
+export const of = (mineCount: number): Type => (
+    mineCount
 )
