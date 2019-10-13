@@ -1,9 +1,9 @@
 import { Map } from 'immutable'
-import * as ActionBase      from '../actions/ActionBase'
-import * as StartGameAction from '../actions/StartGameAction'
-import * as ResetGameAction from '../actions/ResetGameAction'
-import * as CellAction      from '../actions/CellAction'
-import * as Game            from '../../models/Game'
+import * as ActionBase      from './actions/ActionBase'
+import * as StartGameAction from './actions/StartGameAction'
+import * as ResetGameAction from './actions/ResetGameAction'
+import * as CellAction      from './actions/CellAction'
+import * as Game            from '../models/Game'
 
 export const initialState = Map({
     game: null
@@ -29,6 +29,10 @@ export const reduce = (state: Map<any, any>, action: ActionBase.Type) => {
         case CellAction.rotateCellState: {
             const cellAction = action as CellAction.Type
             return state.update('game', game => game === null ? null : Game.rotateState(game, cellAction.x, cellAction.y))
+        }
+
+        default: {
+            return state
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Map, List }    from 'immutable'
-import R                from 'ramda'
+import * as R           from 'ramda'
 import * as Cell        from './Cell'
 import * as CellContent from './CellContent'
 

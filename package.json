@@ -20,6 +20,7 @@
     "@material-ui/icons": "^4.4.3",
     "@types/ramda": "^0.26.28",
     "immutable": "^4.0.0-rc.12",
+    "query-string": "^6.8.3",
     "ramda": "^0.26.1",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
