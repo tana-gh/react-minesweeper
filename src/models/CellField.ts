@@ -2,8 +2,11 @@ import { Map, List }    from 'immutable'
 import * as R           from 'ramda'
 import * as Cell        from './Cell'
 import * as CellContent from './CellContent'
+import * as CellState   from './CellState'
 
 const sentinelCell = Cell.create(-1, -1)
+    .set('content', CellContent.Type.Wall)
+    .set('state'  , CellState  .Type.Wall)
 
 export interface Type {
     cells : List<any>
@@ -80,7 +83,7 @@ const initMineCounts = (cellField: Map<any, any>) => {
 }
 
 const setMineCountToOneCell = (cellField: Map<any, any>, cell: Map<any, any>, arounds: [number, number][]) => {
-    if (cell.get('content') == CellContent.Type.Mine) {
+    if (cell.get('content') === CellContent.Type.Mine) {
         return cell
     }
 
@@ -92,6 +95,15 @@ const setMineCountToOneCell = (cellField: Map<any, any>, cell: Map<any, any>, ar
 
     return cell.set('content', CellContent.of(count))
 }
+
+export const judge = (cellField: Map<any, any>) => (
+    cellField.update('cells', cells =>
+        R.pipe(
+            R.map((cell: Map<any, any>) => Cell.judge(cell)),
+            List
+        )(cells.toArray())
+    )
+)
 
 export const getCell = (cellField: Map<any, any>, x: number, y: number): Map<any, any> => {
     const width  = cellField.get('width')
@@ -105,12 +117,12 @@ export const getCell = (cellField: Map<any, any>, x: number, y: number): Map<any
     }
 }
 
-export const setCell = (cellField: Map<any, any>, x: number, y: number, cell: Map<any, any>): Map<any, any> => {
+export const setCellValue = (cellField: Map<any, any>, x: number, y: number, key: string, value: any): Map<any, any> => {
     const width  = cellField.get('width')
     const height = cellField.get('height')
 
     if (0 <= x && x < width && 0 <= y && y < height) {
-        return cellField.setIn([ 'cells', getIndex(x, y, width, height) ], cell)
+        return cellField.setIn([ 'cells', getIndex(x, y, width, height), key ], value)
     }
     else {
         return cellField

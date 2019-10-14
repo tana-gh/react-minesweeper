@@ -77,8 +77,8 @@ describe('open', () => {
         game = Game.open(game, 0, 1)
 
         expect(game.get('status')).toBe(GameStatus.Type.Failure)
-        expect(game.get('restCount')).toBe(w * h - mineCount - 1)
-        expect(game.getIn([ 'cellField', 'cells', 1, 'state' ])).toBe(CellState.Type.Closed)
+        expect(game.get('restCount')).toBe(w * h - mineCount - 2)
+        expect(game.getIn([ 'cellField', 'cells', 1, 'state' ])).toBe(CellState.Type.Opened)
     })
 
     it('Success', () => {
@@ -144,5 +144,19 @@ describe('rotateState', () => {
         game = Game.rotateState(game, 0, 1)
 
         expect(game.getIn([ 'cellField', 'cells', 1, 'state' ])).toBe(CellState.Type.Closed)
+    })
+})
+
+describe('judge', () => {
+    it('Judged', () => {
+        const mineCount = 6
+        let game = Game.create(4, 3, mineCount)
+        game = Game.open(game, 0, 0)
+        game = Game.judge(game)
+
+        expect(
+            game.getIn([ 'cellField', 'cells' ]).toArray()
+                .filter(x => x.get('state') === CellState.Type.Mine)
+        ).toHaveLength(mineCount)
     })
 })

@@ -1,4 +1,5 @@
 import { Map }          from 'immutable'
+import * as R           from 'ramda'
 import * as GameStatus  from './GameStatus'
 import * as CellField   from './CellField'
 import * as CellContent from './CellContent'
@@ -36,18 +37,60 @@ export const open = (game: Map<any, any>, x: number, y: number) => {
     }
     
     if (status === GameStatus.Type.Ready) {
-        game = game.update('cellField', cellField => CellField.initState(cellField, game.get('mineCount'), x, y))
-        game = game.set('status', GameStatus.Type.Playing)
-    }
-
-    if (cell.get('content') === CellContent.Type.Mine) {
-        return game.set('status', GameStatus.Type.Failure)
+        game = game
+            .update('cellField', cellField => CellField.initState(cellField, game.get('mineCount'), x, y))
+            .set('status', GameStatus.Type.Playing)
     }
     
-    return game
-        .update('cellField', cellField => CellField.setCell(cellField, x, y, cell.set('state', CellState.Type.Opened)))
+    return openTargetCells(game, x, y)
+        .update(game => updateGameStatus(game, x, y))
+}
+
+const openTargetCells = (game: Map<any, any>, x: number, y: number) => {
+    const cell  = CellField.getCell(game.get('cellField'), x, y)
+    const state = cell.get('state')
+
+    if (state !== CellState.Type.Closed) {
+        return game
+    }
+
+    const content = cell.get('content')
+
+    if (content === CellContent.Type.Zero) {
+        return openNineCells(game, x, y)
+    }
+    else {
+        return openOneCell(game, x, y)
+    }
+}
+
+const openNineCells = (game: Map<any, any>, x: number, y: number) => (
+    openOneCell(game, x, y)
+        .update(game =>
+            R.pipe<any, any, any>(
+                R.map(([ i, j ]) => (game: Map<any, any>) => openTargetCells(game, x + i, y + j)),
+                R.reduce((acc, f: (_: Map<any, any>) => Map<any, any>) => f(acc), game)
+            )(R.lift((i, j) => [ i, j ])([-1, 0, 1], [-1, 0, 1]))
+        )
+)
+
+const openOneCell = (game: Map<any, any>, x: number, y: number) => (
+    game.update('cellField', cellField => CellField.setCellValue(cellField, x, y, 'state', CellState.Type.Opened))
         .update('restCount', restCount => restCount - 1)
-        .update(game => game.get('restCount') <= 0 ? game.set('status', GameStatus.Type.Success) : game)
+)
+
+const updateGameStatus = (game: Map<any, any>, x: number, y: number) => {
+    const content = CellField.getCell(game.get('cellField'), x, y).get('content')
+
+    if (content === CellContent.Type.Mine) {
+        return judge(game).set('status', GameStatus.Type.Failure)
+    }
+    else if (game.get('restCount') <= 0) {
+        return game.set('status', GameStatus.Type.Success)
+    }
+    else {
+        return game
+    }
 }
 
 export const rotateState = (game: Map<any, any>, x: number, y: number) => {
@@ -61,28 +104,29 @@ export const rotateState = (game: Map<any, any>, x: number, y: number) => {
         return game
     }
 
-    let   cell  = CellField.getCell(game.get('cellField'), x, y)
-    const state = cell.get('state')
+    const state = CellField.getCell(game.get('cellField'), x, y).get('state')
 
     if (state === CellState.Type.Opened) {
         return game
     }
 
+    let value: CellState.Type
+
     switch (state) {
         case CellState.Type.Closed:
-            cell = cell.set('state', CellState.Type.Flag)
+            value = CellState.Type.Flag
             break
         
         case CellState.Type.Flag:
-            cell = cell.set('state', CellState.Type.Question)
+            value = CellState.Type.Question
             break
 
         case CellState.Type.Question:
-            cell = cell.set('state', CellState.Type.Closed)
+            value = CellState.Type.Closed
             break
     }
 
-    return game.update('cellField', cellField => CellField.setCell(cellField, x, y, cell))
+    return game.update('cellField', cellField => CellField.setCellValue(cellField, x, y, 'state', value))
 }
 
 const isInRange = (game: Map<any, any>, x: number, y: number) => {
@@ -91,3 +135,7 @@ const isInRange = (game: Map<any, any>, x: number, y: number) => {
 
     return 0 <= x && x < width && 0 <= y && y <= height
 }
+
+export const judge = (game: Map<any, any>) => (
+    game.update('cellField', cellField => CellField.judge(cellField))
+)

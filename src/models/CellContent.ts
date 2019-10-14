@@ -9,7 +9,8 @@ export enum Type {
     Six   = 6,
     Seven = 7,
     Eight = 8,
-    Mine  = 9
+    Mine  = 9,
+    Wall  = 10
 }
 
 export const toMineCount = (content: Type): number => (

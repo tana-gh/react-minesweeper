@@ -1,7 +1,7 @@
 import { is }           from 'immutable'
 import * as CellField   from '../../src/models/CellField'
-import * as Cell        from '../../src/models/Cell'
 import * as CellContent from '../../src/models/CellContent'
+import * as CellState   from '../../src/models/CellState'
 
 describe('create', () => {
     it('Assert properties', () => {
@@ -40,6 +40,20 @@ describe('initState', () => {
     })
 })
 
+describe('judge', () => {
+    it('Judged', () => {
+        let cellField = CellField.create(4, 3)
+        const mineCount = 6
+        cellField = CellField.initState(cellField, mineCount, 0, 0)
+        cellField = CellField.judge(cellField)
+
+        expect(
+            cellField.get('cells').toArray()
+                .filter(x => x.get('state') === CellState.Type.Mine)
+        ).toHaveLength(mineCount)
+    })
+})
+
 describe('getCell', () => {
     it('Assert value', () => {
         const [ w, h ] = [ 4, 3 ]
@@ -54,7 +68,7 @@ describe('getCell', () => {
         const [ w, h ] = [ 4, 3 ]
         let cellField = CellField.create(w, h)
 
-        expect(CellField.getCell(cellField, -1, -1).get('content')).toBe(CellContent.Type.Zero)
+        expect(CellField.getCell(cellField, -1, -1).get('content')).toBe(CellContent.Type.Wall)
     })
 })
 
@@ -63,7 +77,7 @@ describe('setCell', () => {
         const [ w, h ] = [ 4, 3 ]
         let cellField = CellField.create(w, h)
 
-        cellField = CellField.setCell(cellField, 0, 0, Cell.create(0, 0).set('content', CellContent.Type.One))
+        cellField = CellField.setCellValue(cellField, 0, 0, 'content', CellContent.Type.One)
 
         expect(cellField.getIn([ 'cells', 0, 'content' ])).toBe(CellContent.Type.One)
     })
@@ -71,7 +85,7 @@ describe('setCell', () => {
     it('Assert sentinel value', () => {
         const [ w, h ] = [ 4, 3 ]
         const cellField0 = CellField.create(w, h)
-        const cellField1 = CellField.setCell(cellField0, -1, -1, Cell.create(0, 0))
+        const cellField1 = CellField.setCellValue(cellField0, -1, -1, 'content', CellContent.Type.One)
 
         expect(is(cellField0, cellField1)).toBeTruthy()
     })

@@ -3,5 +3,8 @@ export enum Type {
     Opened,
     Closed,
     Flag,
-    Question
+    Question,
+    Mine,
+    Wrong,
+    Wall
 }
