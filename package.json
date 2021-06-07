@@ -11,8 +11,7 @@
   "scripts": {
     "test": "jest",
     "dev": "webpack-dev-server --env.dev",
-    "build": "webpack --env.dev",
-    "release": "webpack --env.prod"
+    "build": "webpack --env.prod && (if [ -e LICENSE ]; then cp LICENSE dist; fi) && yarn licenses list > THIRD_PARTY && cp THIRD_PARTY dist"
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
